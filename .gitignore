@@ -1,0 +1,40 @@
+# --- IDE / Environment ---
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# --- Python / Backend ---
+__pycache__/
+*.py[cod]
+*$py.class
+Backend/.venv/
+.venv/
+env/
+venv/
+ENV/
+*.env
+Backend/instance/
+Backend/smarthealth.db
+
+# --- Node.js / Frontend ---
+Frontend/node_modules/
+Frontend/dist/
+Frontend/.env*
+Frontend/npm-debug.log*
+Frontend/yarn-debug.log*
+Frontend/yarn-error.log*
+
+# --- Machine Learning / Data ---
+# Keeping the data folder but ignoring large CSVs and extra model versions
+data/*.csv
+!data/sample_data.csv
+models/*.pkl
+!models/outbreak_model_v5.pkl
+!models/risk_label_encoder_v5.pkl
+notebooks/.ipynb_checkpoints/
+
+# --- Logs ---
+*.log
+logs/
