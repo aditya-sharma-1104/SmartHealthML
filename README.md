@@ -84,5 +84,25 @@ The project uses a **Calibrated Random Forest** model (`models/outbreak_model_v5
 - **Features**: Month, Rainfall, pH Level, BOD Level, Nitrate Level, Temperature.
 - **Interpretability**: Includes basic XAI to identify top contributing factors in each prediction.
 
+
+![Dashboard](Screenshots/Admin%20Dashboard.png)
+
+![Dashboard](Screenshots/Heatmap.png)
+
+![Dashboard](Screenshots/Ai%20Disease%20Outbreak%20Prediction.png)
+
+![Dashboard](Screenshots/Record%20Water%20Quality.png)
+
+![Dashboard](Screenshots/Report%20Cases.png)
+
+
+## 🚀 Future Improvements
+- **SHAP-based explainability**
+- **Real-time environmental API integration**
+- **CI/CD pipeline**
+
 ---
-Built by [Aditya] | 3rd Year CSE Student
+👨‍💻 Developer
+
+Developed by [Aditya]
+

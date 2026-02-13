@@ -21,7 +21,8 @@ Backend/smarthealth.db
 # --- Node.js / Frontend ---
 Frontend/node_modules/
 Frontend/dist/
-Frontend/.env*
+Frontend/.env
+!Frontend/.env.example
 Frontend/npm-debug.log*
 Frontend/yarn-debug.log*
 Frontend/yarn-error.log*
