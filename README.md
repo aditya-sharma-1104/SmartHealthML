@@ -2,6 +2,16 @@
 
 SmartHealthML is a full-stack epidemic surveillance system that leverages machine learning to predict disease outbreak risks based on environmental factors (rainfall, pH, temperature) and historical data. Built for public health officials and researchers, it provides real-time visualization, automated alerts, and detailed reports.
 
+🌍 Why SmartHealthML?
+
+Disease outbreaks are heavily influenced by environmental conditions such as rainfall, temperature, and water quality metrics.
+SmartHealthML demonstrates how machine learning can assist in:
+-Early outbreak detection
+-Risk-based resource allocation
+-Preventive action planning
+-Data-driven public health decision-making
+-This project showcases applied ML + full-stack system design for real-world impact.
+
 ## 🚀 Features
 
 - **Outbreak Prediction**: Calibrated Random Forest model predicting risk levels (Low, Moderate, High).
