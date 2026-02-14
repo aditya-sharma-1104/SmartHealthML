@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Play, FileText, ExternalLink, Phone, ShieldCheck } from 'lucide-react';
+import API from '../../services/api';
 
 const articles = [
     {
@@ -29,9 +30,8 @@ export default function AwarenessPortal() {
     const [tips, setTips] = useState<string[]>([]);
 
     useEffect(() => {
-        fetch("http://127.0.0.1:5000/hygiene-tips")
-            .then(res => res.json())
-            .then(data => setTips(data))
+        API.get("/hygiene-tips")
+            .then(res => setTips(res.data))
             .catch(err => console.error("Error fetching tips:", err));
     }, []);
 
