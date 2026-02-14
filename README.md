@@ -11,6 +11,16 @@ SmartHealthML demonstrates how machine learning can assist in:
 -Preventive action planning
 -Data-driven public health decision-making
 -This project showcases applied ML + full-stack system design for real-world impact.
+-**Comprehensive Documentation**: Detailed guides are available in the [docs/](docs/) directory.
+
+## 📚 Documentation
+
+Explore the detailed project documentation:
+- 🏗️ **[Architecture](docs/architecture.md)**: System design and data flow.
+- 📡 **[API Reference](docs/api_reference.md)**: Complete endpoint documentation.
+- 🗄️ **[Database Schema](docs/database_schema.md)**: Data models and relationships.
+- 🧠 **[ML Model Guide](docs/ml_model_guide.md)**: Training, features, and XAI.
+- 🚀 **[Deployment Guide](docs/deployment_guide.md)**: Hosting on Vercel and Render.
 
 ## 🚀 Features
 
