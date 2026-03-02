@@ -181,8 +181,37 @@ npm run dev                 # Starts on http://localhost:5173
 - **SHAP Explainability**: Move from feature importance to SHAP-based XAI.
 - **Real-time Environmental API**: Auto-fetch rainfall/temperature from external APIs.
 - **Report Export**: PDF generation for the Reports page.
-- **CI/CD Pipeline**: Automated deployment on push to `main`.
 
 ---
 
-👨‍💻 **Developed by [Aditya]** | v1.1.0
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. **Fork** the repo and create a branch from `main`:
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+2. Make your changes and commit using the [Conventional Commits](https://www.conventionalcommits.org/) format:
+   ```
+   feat(scope): short description
+   fix(scope): short description
+   docs(scope): short description
+   ```
+3. Push your branch and open a **Pull Request** against `main`.
+
+### PR Checklist
+- [ ] Code runs locally without errors
+- [ ] ESLint passes: `npm run lint` (in `Frontend/`)
+- [ ] Backend tests pass: `pytest` (in `Backend/`)
+- [ ] Screenshots attached for any UI changes
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+👨‍💻 **Developed by [Aditya](https://github.com/aditya-sharma-1104)** | v1.1.0
