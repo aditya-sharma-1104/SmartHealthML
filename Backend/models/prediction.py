@@ -13,6 +13,8 @@ class Prediction(db.Model):
     temp = db.Column(db.Float)
     risk_level = db.Column(db.String(50))
     probability = db.Column(db.Float)
+    latitude = db.Column(db.Float)
+    longitude = db.Column(db.Float)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def to_dict(self):
@@ -27,5 +29,7 @@ class Prediction(db.Model):
             "temp": self.temp,
             "risk_level": self.risk_level,
             "probability": self.probability,
+            "latitude": self.latitude,
+            "longitude": self.longitude,
             "created_at": self.created_at.isoformat()
         }

@@ -17,6 +17,9 @@ import ReportsPage from './pages/reports/ReportsPage';
 // Extras
 import AwarenessPortal from './pages/awareness/AwarenessPortal';
 import UserManagement from './pages/admin/UserManagement';
+import SystemSettings from './pages/admin/SystemSettings';
+import SystemLogs from './pages/admin/SystemLogs';
+import AlertConfig from './pages/admin/AlertConfig';
 
 // Dashboards
 import AdminDashboard from './pages/dashboards/AdminDashboard';
@@ -24,6 +27,11 @@ import OfficerDashboard from './pages/dashboards/HealthOfficerDashboard';
 import WorkerDashboard from './pages/dashboards/WorkerDashboard';
 import PublicDashboard from './pages/dashboards/PublicDashboard';
 import ClinicDashboard from './pages/dashboards/ClinicDashboard';
+import SubmissionHistory from './pages/dashboards/SubmissionHistory';
+
+// Public Pages
+import HygieneTipsPage from './pages/public/HygieneTipsPage';
+import NearbyCenters from './pages/public/NearbyCenters';
 
 const Unauthorized = () => (
   <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
@@ -73,6 +81,8 @@ function App() {
                 <Routes>
                   <Route path="/" element={<PublicDashboard />} />
                   <Route path="awareness" element={<AwarenessPortal />} />
+                  <Route path="tips" element={<HygieneTipsPage />} />
+                  <Route path="centers" element={<NearbyCenters />} />
                 </Routes>
               </ProtectedRoute>
             } />
@@ -82,7 +92,9 @@ function App() {
                 <Routes>
                   <Route path="/" element={<AdminDashboard />} />
                   <Route path="users" element={<UserManagement />} />
-                  <Route path="settings" element={<div className="p-4">System Settings (Coming Soon)</div>} />
+                  <Route path="logs" element={<SystemLogs />} />
+                  <Route path="alerts" element={<AlertConfig />} />
+                  <Route path="settings" element={<SystemSettings />} />
                 </Routes>
               </ProtectedRoute>
             } />
@@ -105,7 +117,7 @@ function App() {
                   <Route path="/" element={<WorkerDashboard />} />
                   <Route path="report-case" element={<CaseReportForm />} />
                   <Route path="water-quality" element={<WaterQualityForm />} />
-                  <Route path="history" element={<div className="p-4">Submission History (Coming Soon)</div>} />
+                  <Route path="history" element={<SubmissionHistory />} />
                 </Routes>
               </ProtectedRoute>
             } />

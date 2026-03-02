@@ -9,6 +9,8 @@ const predictionData = [
     { name: 'Week 5', risk: 45 },
 ];
 
+import RiskHeatmap from '../../components/RiskHeatmap';
+
 export default function OfficerDashboard() {
     return (
         <div className="space-y-6">
@@ -58,8 +60,8 @@ export default function OfficerDashboard() {
                         <MapPin className="w-5 h-5 mr-2 text-gray-500" />
                         Live Risk Heatmap
                     </h3>
-                    <div className="bg-gray-100 w-full h-80 rounded flex items-center justify-center border-2 border-dashed border-gray-300">
-                        <p className="text-gray-500">Interactive Map Component Loading...</p>
+                    <div className="w-full">
+                        <RiskHeatmap height="320px" zoom={4} />
                     </div>
                 </div>
 

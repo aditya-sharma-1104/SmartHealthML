@@ -15,14 +15,28 @@ from routes.water_routes import water_bp
 from routes.predict_routes import predict_bp
 from routes.alert_routes import alert_bp
 from routes.public_routes import public_bp
+from routes.auth_routes import auth_bp
+from routes.stats_routes import stats_bp
+from routes.user_routes import user_bp
+from routes.log_routes import log_bp
+from routes.clinic_routes import clinic_bp
 from models.prediction import Prediction
 from models.alert import Alert
+from models.user import User
+from models.log import SystemLog
+from models.patient import Patient
+from models.lab_report import LabReport
 
 app.register_blueprint(case_bp)
 app.register_blueprint(water_bp)
 app.register_blueprint(predict_bp)
 app.register_blueprint(alert_bp)
 app.register_blueprint(public_bp)
+app.register_blueprint(auth_bp)
+app.register_blueprint(stats_bp)
+app.register_blueprint(user_bp)
+app.register_blueprint(log_bp)
+app.register_blueprint(clinic_bp)
 
 if __name__ == "__main__":
     with app.app_context():

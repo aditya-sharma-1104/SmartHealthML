@@ -1,9 +1,13 @@
 import { useState } from 'react';
-import { AlertTriangle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { AlertTriangle, CheckCircle } from 'lucide-react';
 import API from "../../services/api";
+import { useAuth } from '../../context/AuthContext';
 
 
 export default function WaterQualityForm() {
+    const { user } = useAuth();
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         sourceId: '',
         location: '',
@@ -13,41 +17,58 @@ export default function WaterQualityForm() {
         notes: ''
     });
     const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const [error, setError] = useState('');
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
+        setSuccess(false);
+        setError('');
 
         try {
-            await API.post("/water/report", {
+            await API.post("/api/water/report", {
                 source: formData.sourceId,
                 location: formData.location,
                 ph: formData.phLevel,
-                turbidity: formData.turbidity
+                turbidity: formData.turbidity,
+                worker_id: user?.id
             });
 
+            setSuccess(true);
             setLoading(false);
-            alert('Water quality data recorded successfully!');
 
-            // Reset form
-            setFormData({
-                sourceId: '',
-                location: '',
-                phLevel: 7.0,
-                turbidity: 5,
-                contaminationNoted: false,
-                notes: ''
-            });
+            // Redirect to history after brief delay
+            setTimeout(() => {
+                navigate('/worker/history');
+            }, 1500);
 
-        } catch (error) {
+        } catch (err) {
             setLoading(false);
-            alert('Failed to submit water quality data');
+            setError('Failed to submit water quality data. Please try again.');
         }
     };
 
     return (
         <div className="max-w-3xl mx-auto">
             <h1 className="text-2xl font-semibold text-gray-900 mb-6">Record Water Quality Data</h1>
+
+            {success && (
+                <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center">
+                    <CheckCircle className="w-5 h-5 text-green-500 mr-3" />
+                    <div>
+                        <h3 className="text-sm font-medium text-green-800">Recording successful</h3>
+                        <p className="text-sm text-green-700 mt-1">Data saved. Redirecting to your submissions...</p>
+                    </div>
+                </div>
+            )}
+
+            {error && (
+                <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center">
+                    <AlertTriangle className="w-5 h-5 text-red-500 mr-3" />
+                    <p className="text-sm text-red-700">{error}</p>
+                </div>
+            )}
 
             <div className="bg-white shadow sm:rounded-lg overflow-hidden">
                 <form onSubmit={handleSubmit} className="p-6 space-y-6">

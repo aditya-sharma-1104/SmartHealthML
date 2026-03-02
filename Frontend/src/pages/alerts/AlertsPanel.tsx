@@ -12,7 +12,7 @@ export default function AlertsPanel() {
     useEffect(() => {
         const fetchAlerts = async () => {
             try {
-                const response = await API.get('/alerts');
+                const response = await API.get('/api/alerts/');
                 setAlerts(response.data);
             } catch (error) {
                 console.error('Error fetching alerts:', error);
@@ -25,20 +25,20 @@ export default function AlertsPanel() {
         return () => clearInterval(interval);
     }, []);
 
-    const getTypeStyles = (risk: string) => {
-        switch (risk.toUpperCase()) {
-            case 'HIGH': return 'bg-red-50 border-l-4 border-red-500 text-red-700';
-            case 'MODERATE': return 'bg-orange-50 border-l-4 border-orange-500 text-orange-700';
-            case 'LOW': return 'bg-blue-50 border-l-4 border-blue-500 text-blue-700';
+    const getTypeStyles = (severity: string) => {
+        switch (severity.toLowerCase()) {
+            case 'high': return 'bg-red-50 border-l-4 border-red-500 text-red-700';
+            case 'medium': return 'bg-orange-50 border-l-4 border-orange-500 text-orange-700';
+            case 'low': return 'bg-blue-50 border-l-4 border-blue-500 text-blue-700';
             default: return 'bg-gray-50 border-l-4 border-gray-500';
         }
     };
 
-    const getIcon = (risk: string) => {
-        switch (risk.toUpperCase()) {
-            case 'HIGH': return <AlertTriangle className="h-5 w-5 text-red-500" />;
-            case 'MODERATE': return <AlertTriangle className="h-5 w-5 text-orange-500" />;
-            case 'LOW': return <Info className="h-5 w-5 text-blue-500" />;
+    const getIcon = (severity: string) => {
+        switch (severity.toLowerCase()) {
+            case 'high': return <AlertTriangle className="h-5 w-5 text-red-500" />;
+            case 'medium': return <AlertTriangle className="h-5 w-5 text-orange-500" />;
+            case 'low': return <Info className="h-5 w-5 text-blue-500" />;
             default: return <Info className="h-5 w-5 text-gray-500" />;
         }
     };
@@ -50,9 +50,9 @@ export default function AlertsPanel() {
 
     const filteredAlerts = alerts.filter(alert => {
         if (filter === 'all') return true;
-        if (filter === 'critical') return alert.risk_level === 'HIGH';
-        if (filter === 'warning') return alert.risk_level === 'MODERATE';
-        if (filter === 'info') return alert.risk_level === 'LOW';
+        if (filter === 'critical') return alert.severity === 'high';
+        if (filter === 'warning') return alert.severity === 'medium';
+        if (filter === 'info') return alert.severity === 'low';
         return true;
     });
 
@@ -105,25 +105,25 @@ export default function AlertsPanel() {
                     </div>
                 ) : filteredAlerts.length > 0 ? (
                     filteredAlerts.map((alert, idx) => (
-                        <div key={idx} className={`${getTypeStyles(alert.risk_level)} p-4 rounded-md shadow-sm transition-all hover:shadow-md`}>
+                        <div key={idx} className={`${getTypeStyles(alert.severity)} p-4 rounded-md shadow-sm transition-all hover:shadow-md`}>
                             <div className="flex items-start">
                                 <div className="flex-shrink-0">
-                                    {getIcon(alert.risk_level)}
+                                    {getIcon(alert.severity)}
                                 </div>
                                 <div className="ml-3 w-full">
                                     <div className="flex justify-between items-start">
-                                        <h3 className="text-sm font-bold uppercase tracking-wider">{alert.risk_level} RISK ALERT</h3>
+                                        <h3 className="text-sm font-bold uppercase tracking-wider">{alert.severity} RISK ALERT: {alert.title}</h3>
                                         <span className="text-[10px] text-opacity-70 font-mono flex items-center">
                                             <Clock className="w-3 h-3 mr-1" />
                                             {formatTime(alert.created_at)}
                                         </span>
                                     </div>
                                     <div className="mt-1 text-sm">
-                                        <p>{alert.message}</p>
+                                        <p>{alert.description}</p>
                                     </div>
                                     <div className="mt-2 text-[10px] font-bold uppercase tracking-widest opacity-70 flex items-center">
-                                        <MapPin className="w-3 h-3 mr-1" />
-                                        Location: {alert.state}
+                                        <Clock className="w-3 h-3 mr-1" />
+                                        Surveillance Status: ACTIVE
                                     </div>
                                 </div>
                             </div>
@@ -141,8 +141,3 @@ export default function AlertsPanel() {
     );
 }
 
-function MapPin({ className }: { className?: string }) {
-    return (
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></svg>
-    )
-}

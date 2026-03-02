@@ -1,6 +1,8 @@
-import { Flag, Phone, ExternalLink } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Flag, Phone, ChevronRight, Navigation } from 'lucide-react';
+import API from '../../services/api';
 
-// --- SVG Illustrations ---
+// ... (SVG Illustrations remain the same)
 
 const HandWashingIllustration = () => (
     <svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg" className="w-full h-40 object-contain">
@@ -184,6 +186,23 @@ const hygieneTimps = [
 ];
 
 export default function PublicDashboard() {
+    const [alerts, setAlerts] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchAlerts = async () => {
+            try {
+                const response = await API.get('/api/alerts/');
+                setAlerts(response.data);
+            } catch (error) {
+                console.error("Failed to fetch alerts", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchAlerts();
+    }, []);
+
     return (
         <div className="space-y-10">
             {/* Hero Section */}
@@ -202,16 +221,25 @@ export default function PublicDashboard() {
                         <Flag className="w-6 h-6 mr-2 text-yellow-500" />
                         Local Health Alerts
                     </h2>
-                    <div className="space-y-3">
-                        <div className="bg-yellow-50 p-4 rounded-md border border-yellow-200">
-                            <p className="font-semibold text-yellow-800">Seasonal Flu Warning</p>
-                            <p className="text-sm text-yellow-700 mt-1">Cases rising in Sector 4. Please wear masks in crowded areas.</p>
+                    {loading ? (
+                        <div className="text-gray-500 text-sm">Loading alerts...</div>
+                    ) : alerts.length === 0 ? (
+                        <div className="text-gray-500 text-sm italic">No active health alerts at this time.</div>
+                    ) : (
+                        <div className="space-y-3">
+                            {alerts.map((alert) => (
+                                <div key={alert.id} className={`${alert.severity === 'high' ? 'bg-red-50 border-red-200' : 'bg-yellow-50 border-yellow-200'
+                                    } p-4 rounded-md border`}>
+                                    <p className={`font-semibold ${alert.severity === 'high' ? 'text-red-800' : 'text-yellow-800'}`}>
+                                        {alert.title}
+                                    </p>
+                                    <p className={`text-sm mt-1 ${alert.severity === 'high' ? 'text-red-700' : 'text-yellow-700'}`}>
+                                        {alert.description}
+                                    </p>
+                                </div>
+                            ))}
                         </div>
-                        <div className="bg-red-50 p-4 rounded-md border border-red-200">
-                            <p className="font-semibold text-red-800">Water Quality Advisory</p>
-                            <p className="text-sm text-red-700 mt-1">Boil drinking water in districts 7 & 8 until further notice.</p>
-                        </div>
-                    </div>
+                    )}
                 </div>
 
                 {/* Emergency Helpline */}
@@ -228,15 +256,10 @@ export default function PublicDashboard() {
                             💬 Send SMS Alert
                         </a>
                         <button
-                            onClick={() => {
-                                navigator.geolocation.getCurrentPosition(
-                                    (pos) => window.open(`https://www.google.com/maps/search/hospitals/@${pos.coords.latitude},${pos.coords.longitude},15z`, '_blank'),
-                                    () => window.open('https://www.google.com/maps/search/hospitals/', '_blank')
-                                );
-                            }}
-                            className="bg-teal-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-teal-700 transition shadow text-center"
+                            onClick={() => window.location.href = '/public/centers'}
+                            className="bg-teal-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-teal-700 transition shadow text-center flex items-center justify-center gap-2"
                         >
-                            🗺️ Find Nearest Hospital
+                            <Navigation className="w-5 h-5" /> Detailed Centers Map
                         </button>
                     </div>
                 </div>
@@ -244,38 +267,30 @@ export default function PublicDashboard() {
 
             {/* Hygiene Tips Section */}
             <div>
-                <div className="mb-6">
-                    <h2 className="text-2xl font-bold text-gray-900">🧼 Essential Hygiene Tips</h2>
-                    <p className="text-gray-500 mt-1 text-sm">Follow these daily habits to protect yourself and your community from disease.</p>
+                <div className="mb-6 flex justify-between items-end">
+                    <div>
+                        <h2 className="text-2xl font-bold text-gray-900">🧼 Essential Hygiene Tips</h2>
+                        <p className="text-gray-500 mt-1 text-sm">Essential daily habits for your protection.</p>
+                    </div>
+                    <a href="/public/tips" className="text-sm font-bold text-indigo-600 hover:text-indigo-800 flex items-center">
+                        View Full Portal <ChevronRight className="w-4 h-4" />
+                    </a>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
-                    {hygieneTimps.map((tip) => (
+                    {hygieneTimps.slice(0, 5).map((tip) => (
                         <div
                             key={tip.title}
                             className={`bg-gradient-to-b ${tip.color.bg} rounded-2xl border ${tip.color.border} shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col overflow-hidden group`}
                         >
-                            {/* Illustration */}
                             <div className="p-3 pt-4">
                                 <tip.Illustration />
                             </div>
-
-                            {/* Content */}
                             <div className="flex flex-col flex-1 p-4 pt-2">
                                 <span className={`text-[10px] font-bold uppercase tracking-widest ${tip.color.text} mb-1`}>
                                     {tip.category}
                                 </span>
                                 <h3 className="text-base font-bold text-gray-900 mb-2 leading-snug">{tip.title}</h3>
-                                <p className="text-xs text-gray-600 leading-relaxed flex-1">{tip.description}</p>
-
-                                {/* Read More */}
-                                <a
-                                    href={tip.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className={`mt-4 inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-white ${tip.color.btnBg} px-4 py-2 rounded-lg transition-colors`}
-                                >
-                                    Read More <ExternalLink className="w-3 h-3" />
-                                </a>
+                                <p className="text-xs text-gray-600 leading-relaxed flex-1 line-clamp-2">{tip.description}</p>
                             </div>
                         </div>
                     ))}

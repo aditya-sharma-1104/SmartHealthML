@@ -1,5 +1,8 @@
+import { useState, useEffect } from 'react';
 import { ClipboardPlus, Droplet, FileText, History } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import API from '../../services/api';
 
 const QuickActionCard = ({ title, description, icon: Icon, to, color }: any) => (
     <Link to={to} className="block group">
@@ -16,11 +19,31 @@ const QuickActionCard = ({ title, description, icon: Icon, to, color }: any) => 
 );
 
 export default function WorkerDashboard() {
+    const { user } = useAuth();
+    const [recentCases, setRecentCases] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchRecentCases = async () => {
+            if (!user) return;
+            try {
+                // Fetch all worker cases and take top 3
+                const response = await API.get(`/api/cases/my-submissions/${user.id}`);
+                setRecentCases(response.data.slice(0, 3));
+            } catch (error) {
+                console.error("Failed to fetch recent submissions", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchRecentCases();
+    }, [user]);
+
     return (
         <div className="space-y-6">
             <div className="border-b border-gray-200 pb-5">
                 <h1 className="text-2xl font-semibold text-gray-900">ASHA Worker Portal</h1>
-                <p className="mt-2 max-w-4xl text-sm text-gray-500">Select an action below to report data or view your history.</p>
+                <p className="mt-2 max-w-4xl text-sm text-gray-500">Welcome back, {user?.name}. Select an action below to report data or view your history.</p>
             </div>
 
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -49,35 +72,46 @@ export default function WorkerDashboard() {
 
             <div className="mt-8">
                 <h2 className="text-lg font-medium text-gray-900 mb-4">Recent Submissions</h2>
-                <div className="bg-white shadow overflow-hidden sm:rounded-md">
-                    <ul className="divide-y divide-gray-200">
-                        {[1, 2, 3].map((item) => (
-                            <li key={item}>
-                                <div className="px-4 py-4 sm:px-6 hover:bg-gray-50 transition duration-150 ease-in-out cursor-pointer">
-                                    <div className="flex items-center justify-between">
-                                        <p className="text-sm font-medium text-blue-600 truncate">Symptom Report: High Fever</p>
-                                        <div className="ml-2 flex-shrink-0 flex">
-                                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                                Submitted
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className="mt-2 sm:flex sm:justify-between">
-                                        <div className="sm:flex">
-                                            <p className="flex items-center text-sm text-gray-500">
-                                                <FileText className="flex-shrink-0 mr-1.5 h-4 w-4 text-gray-400" />
-                                                Village ID: #12
+                {loading ? (
+                    <div className="py-4 text-gray-500">Loading recent submissions...</div>
+                ) : recentCases.length === 0 ? (
+                    <div className="bg-white p-8 rounded-lg border-2 border-dashed border-gray-200 text-center text-gray-500">
+                        No recent submissions found.
+                    </div>
+                ) : (
+                    <div className="bg-white shadow overflow-hidden sm:rounded-md">
+                        <ul className="divide-y divide-gray-200">
+                            {recentCases.map((item) => (
+                                <li key={item.id}>
+                                    <div className="px-4 py-4 sm:px-6 hover:bg-gray-50 transition duration-150 ease-in-out cursor-pointer">
+                                        <div className="flex items-center justify-between">
+                                            <p className="text-sm font-medium text-blue-600 truncate">
+                                                {item.disease_type || 'Case'}: {item.patient_name}
                                             </p>
+                                            <div className="ml-2 flex-shrink-0 flex">
+                                                <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${item.status === 'resolved' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
+                                                    }`}>
+                                                    {item.status}
+                                                </span>
+                                            </div>
                                         </div>
-                                        <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-                                            <p>Closed on Jan {item + 10}, 2024</p>
+                                        <div className="mt-2 sm:flex sm:justify-between">
+                                            <div className="sm:flex">
+                                                <p className="flex items-center text-sm text-gray-500">
+                                                    <FileText className="flex-shrink-0 mr-1.5 h-4 w-4 text-gray-400" />
+                                                    Village: {item.village}
+                                                </p>
+                                            </div>
+                                            <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                                                <p>Submitted on {new Date(item.created_at).toLocaleDateString()}</p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
             </div>
         </div>
     );

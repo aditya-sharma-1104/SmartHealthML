@@ -28,24 +28,24 @@ export default function Login() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl shadow-xl border border-blue-100/50 backdrop-blur-sm">
-                <div className="text-center">
-                    <div className="mx-auto h-12 w-12 bg-blue-600 rounded-full flex items-center justify-center">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 animate-gradient-x flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-md w-full space-y-8 bg-white/90 p-8 rounded-2xl shadow-2xl border border-white/50 backdrop-blur-md animate-fade-in">
+                <div className="text-center animate-fade-in-up">
+                    <div className="mx-auto h-14 w-14 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-full flex items-center justify-center shadow-lg transform transition hover:scale-105 duration-300">
                         <Activity className="h-8 w-8 text-white" />
                     </div>
-                    <h2 className="mt-6 text-center text-3xl font-extrabold text-slate-900 tracking-tight">
+                    <h2 className="mt-6 text-center text-3xl font-extrabold text-slate-800 tracking-tight">
                         Smart Health System
                     </h2>
-                    <p className="mt-2 text-center text-sm text-slate-600">
-                        Surveillance & Early Warning Dashboard
+                    <p className="mt-2 text-center text-sm text-slate-500 font-medium tracking-wide uppercase">
+                        Surveillance & Early Warning
                     </p>
                 </div>
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-                    <div className="space-y-4">
-                        <div className="relative">
+                    <div className="space-y-5">
+                        <div className="relative group animate-fade-in-up delay-100">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <Mail className="h-5 w-5 text-gray-400" />
+                                <Mail className="h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors duration-200" />
                             </div>
                             <input
                                 id="email-address"
@@ -53,15 +53,15 @@ export default function Login() {
                                 type="email"
                                 autoComplete="email"
                                 required
-                                className="appearance-none rounded-lg relative block w-full pl-10 px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm transition-colors duration-200"
+                                className="appearance-none rounded-xl relative block w-full pl-10 px-3 py-3.5 border border-gray-200 placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 focus:bg-white bg-gray-50/50 sm:text-sm transition-all duration-300 hover:border-gray-300"
                                 placeholder="Email address"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
                         </div>
-                        <div className="relative">
+                        <div className="relative group animate-fade-in-up delay-200">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <Lock className="h-5 w-5 text-gray-400" />
+                                <Lock className="h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors duration-200" />
                             </div>
                             <input
                                 id="password"
@@ -69,23 +69,23 @@ export default function Login() {
                                 type="password"
                                 autoComplete="current-password"
                                 required
-                                className="appearance-none rounded-lg relative block w-full pl-10 px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm transition-colors duration-200"
+                                className="appearance-none rounded-xl relative block w-full pl-10 px-3 py-3.5 border border-gray-200 placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 focus:bg-white bg-gray-50/50 sm:text-sm transition-all duration-300 hover:border-gray-300"
                                 placeholder="Password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
                         </div>
 
-                        <div className="relative">
-                            <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">Select Role</label>
-                            <div className="relative">
-                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <UserCircle className="h-5 w-5 text-gray-400" />
+                        <div className="relative animate-fade-in-up delay-300">
+                            <label htmlFor="role" className="block text-sm font-medium text-slate-700 mb-1.5 ml-1">Select Role</label>
+                            <div className="relative group">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
+                                    <UserCircle className="h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors duration-200" />
                                 </div>
                                 <select
                                     id="role"
                                     name="role"
-                                    className="appearance-none rounded-lg relative block w-full pl-10 px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm bg-white"
+                                    className="appearance-none rounded-xl relative block w-full pl-10 px-3 py-3.5 border border-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 focus:bg-white bg-gray-50/50 sm:text-sm cursor-pointer transition-all duration-300 hover:border-gray-300"
                                     value={role}
                                     onChange={(e) => setRole(e.target.value as UserRole)}
                                 >
@@ -99,7 +99,7 @@ export default function Login() {
                         </div>
                     </div>
 
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between animate-fade-in-up delay-300">
                         <div className="flex items-center">
                             <input
                                 id="remember-me"
@@ -119,11 +119,11 @@ export default function Login() {
                         </div>
                     </div>
 
-                    <div>
+                    <div className="pt-2 animate-fade-in-up delay-300">
                         <button
                             type="submit"
                             disabled={loading}
-                            className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed"
+                            className="group relative w-full flex justify-center py-3.5 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 shadow-lg hover:shadow-blue-500/30 transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
                         >
                             {loading ? (
                                 <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -135,10 +135,10 @@ export default function Login() {
                         </button>
                     </div>
 
-                    <div className="text-center mt-4">
-                        <p className="text-sm text-gray-600">
+                    <div className="text-center mt-6 animate-fade-in-up delay-300">
+                        <p className="text-sm text-slate-600">
                             Don't have an account?{' '}
-                            <Link to="/register" className="font-medium text-blue-600 hover:text-blue-500 transition-colors">
+                            <Link to="/register" className="font-semibold text-blue-600 hover:text-indigo-600 transition-colors duration-200">
                                 Register here
                             </Link>
                         </p>

@@ -1,0 +1,33 @@
+# SmartHealthML Project Audit Report
+
+This report outlines the current state of the SmartHealthML dashboards, identifying features that are currently incomplete, hardcoded, or using placeholders.
+
+## 1. Public Dashboard ([PublicDashboard.tsx](file:///c:/Users/adity/Documents/All%20Projects/SmartHealthML/Frontend/src/pages/dashboards/PublicDashboard.tsx))
+- **Hardcoded Alerts**: "Seasonal Flu Warning" and "Water Quality Advisory" are hardcoded. They should be fetched from the backend `/api/alerts` endpoint.
+- **Static Content**: Hygiene tips are well-designed but static. 
+
+## 2. Admin Dashboard ([AdminDashboard.tsx](file:///c:/Users/adity/Documents/All%20Projects/SmartHealthML/Frontend/src/pages/dashboards/AdminDashboard.tsx))
+- **Hardcoded Stats**: "Total Users", "Active Alerts", etc., are all hardcoded numbers.
+- **Static Activity Chart**: The "System Activity" bar chart uses hardcoded monthly data.
+- **Mock System Logs**: All logs shown are hardcoded placeholders.
+- **Missing Features**: The "System Settings" route (`/admin/settings`) in [App.tsx](file:///c:/Users/adity/Documents/All%20Projects/SmartHealthML/Frontend/src/App.tsx) is just a "Coming Soon" placeholder.
+
+## 3. Health Officer Dashboard ([OfficerDashboard.tsx](file:///c:/Users/adity/Documents/All%20Projects/SmartHealthML/Frontend/src/pages/dashboards/HealthOfficerDashboard.tsx))
+- **Hardcoded KPIs**: "Critical Alerts", "Predicted Outbreaks", and "Active Cases" are hardcoded.
+- **Map Placeholder**: The "Live Risk Heatmap" section is currently just a gray box with a "Loading..." message.
+- **Static Trend Chart**: The "Disease Risk Trend" uses hardcoded weekly data.
+
+## 4. Worker Dashboard ([WorkerDashboard.tsx](file:///c:/Users/adity/Documents/All%20Projects/SmartHealthML/Frontend/src/pages/dashboards/WorkerDashboard.tsx))
+- **Mock Recent Submissions**: The list of recent reports is hardcoded.
+- **Missing Features**: The "Submission History" route (`/worker/history`) in [App.tsx](file:///c:/Users/adity/Documents/All%20Projects/SmartHealthML/Frontend/src/App.tsx) is just a "Coming Soon" placeholder.
+
+## 5. Clinic Dashboard ([ClinicDashboard.tsx](file:///c:/Users/adity/Documents/All%20Projects/SmartHealthML/Frontend/src/pages/dashboards/ClinicDashboard.tsx))
+- **UI Placeholder for Upload**: The "Upload Patient Data (CSV)" section has no actual upload logic or backend integration.
+- **Hardcoded Report Table**: The "Recent Lab Reports" table contains hardcoded mock data.
+
+## 6. General Infrastructure
+- **Authentication**: The system currently uses a mock authentication flow that stores user data in `localStorage` without verifying it against a backend database.
+- **User Management**: The user management list is based on a static seed data list in the frontend.
+
+---
+**Recommendation**: Priority should be given to implementing the backend APIs for Auth, Stats, and History, followed by connecting the frontend components to these real data sources.

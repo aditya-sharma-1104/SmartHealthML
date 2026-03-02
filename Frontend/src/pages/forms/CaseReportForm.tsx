@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import API from "../../services/api";
+import { useAuth } from '../../context/AuthContext';
 
 interface FormData {
     patientName: string;
@@ -12,6 +13,7 @@ interface FormData {
 }
 
 export default function CaseReportingForm() {
+    const { user } = useAuth();
     const [formData, setFormData] = useState<FormData>({
         patientName: '',
         age: '',
@@ -41,12 +43,13 @@ export default function CaseReportingForm() {
         setSuccess(false);
 
         try {
-            await API.post("/cases/report", {
+            await API.post("/api/cases/report", {
                 patient_name: formData.patientName,
                 age: formData.age,
                 village: formData.village,
                 symptoms: formData.symptoms.join(", "),
-                severity: formData.severity
+                severity: formData.severity,
+                worker_id: user?.id
             });
 
             setSuccess(true);

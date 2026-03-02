@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify
 
-public_bp = Blueprint("public", __name__)
+public_bp = Blueprint("public", __name__, url_prefix="/api/public")
 
 @public_bp.route("/hygiene-tips", methods=["GET"])
 def hygiene_tips():

@@ -10,7 +10,7 @@ export default function ReportsPage() {
     useEffect(() => {
         const fetchSummary = async () => {
             try {
-                const response = await API.get('/report-summary');
+                const response = await API.get('/api/report-summary');
                 setSummary(response.data);
             } catch (error) {
                 console.error('Error fetching summary:', error);
@@ -132,6 +132,53 @@ export default function ReportsPage() {
                     </div>
                 </div>
             </div>
+
+            {/* Recent Predictions Table */}
+            {summary?.recent_predictions && summary.recent_predictions.length > 0 && (
+                <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden mt-8">
+                    <div className="p-6 border-b border-gray-100">
+                        <h2 className="text-xl font-bold text-gray-900 flex items-center">
+                            <FileBarChart className="w-5 h-5 mr-2 text-indigo-500" />
+                            Recent Surveillance Data
+                        </h2>
+                        <p className="text-sm text-gray-500 mt-1">Automatically compiled from system-wide AI predictions.</p>
+                    </div>
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse">
+                            <thead>
+                                <tr className="bg-gray-50 border-b border-gray-100">
+                                    <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">Date / Time</th>
+                                    <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">Location</th>
+                                    <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">Risk Level</th>
+                                    <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">Intensity</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-100">
+                                {summary.recent_predictions.map((pred: any) => {
+                                    const riskColor =
+                                        pred.risk_level === 'HIGH' ? 'bg-red-100 text-red-700' :
+                                            pred.risk_level === 'MODERATE' ? 'bg-orange-100 text-orange-700' :
+                                                'bg-green-100 text-green-700';
+                                    return (
+                                        <tr key={pred.id} className="hover:bg-gray-50 transition-colors">
+                                            <td className="py-4 px-6 text-sm text-gray-600 font-medium whitespace-nowrap">{pred.date}</td>
+                                            <td className="py-4 px-6 text-sm font-bold text-gray-900">{pred.state}</td>
+                                            <td className="py-4 px-6">
+                                                <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${riskColor}`}>
+                                                    {pred.risk_level}
+                                                </span>
+                                            </td>
+                                            <td className="py-4 px-6 text-sm font-semibold text-gray-700">
+                                                {(pred.probability * 100).toFixed(1)}%
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

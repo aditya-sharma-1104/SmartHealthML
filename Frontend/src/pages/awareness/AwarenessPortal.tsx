@@ -30,7 +30,7 @@ export default function AwarenessPortal() {
     const [tips, setTips] = useState<string[]>([]);
 
     useEffect(() => {
-        API.get("/hygiene-tips")
+        API.get("/api/public/hygiene-tips")
             .then(res => setTips(res.data))
             .catch(err => console.error("Error fetching tips:", err));
     }, []);

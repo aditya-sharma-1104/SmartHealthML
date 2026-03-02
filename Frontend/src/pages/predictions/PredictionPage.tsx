@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Activity, Wind, Droplet, Thermometer, MapPin, AlertTriangle, ChevronRight, ShieldCheck } from 'lucide-react';
 import { RadialBarChart, RadialBar, ResponsiveContainer } from 'recharts';
 import API from "../../services/api";
+import RiskHeatmap, { stateCoordinates } from '../../components/RiskHeatmap';
 
 export default function PredictionPage() {
     const [formData, setFormData] = useState({
@@ -15,6 +16,9 @@ export default function PredictionPage() {
     });
 
     const [prediction, setPrediction] = useState<null | {
+        state: string;
+        latitude: number;
+        longitude: number;
         score: number;
         riskLevel: string;
         likelihood: number;
@@ -25,13 +29,27 @@ export default function PredictionPage() {
     }>(null);
 
     const [loading, setLoading] = useState(false);
+    const [reports, setReports] = useState<any>(null);
+
+    const fetchReports = async () => {
+        try {
+            const res = await API.get('/api/report-summary');
+            setReports(res.data);
+        } catch (err) {
+            console.error("Error fetching reports:", err);
+        }
+    };
+
+    useEffect(() => {
+        fetchReports();
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
 
         try {
-            const response = await API.post("/predict", {
+            const response = await API.post("/api/predict", {
                 state: formData.location,
                 month: new Date().getMonth() + 1,
                 rainfall: parseFloat(formData.rainfall) || 0,
@@ -41,7 +59,7 @@ export default function PredictionPage() {
                 nitrate: parseFloat(formData.nitrate) || 0
             });
 
-            const { risk_level, probability, confidence, factors, alert } = response.data;
+            const { state, latitude, longitude, risk_level, probability, confidence, factors, alert } = response.data;
 
             // Map backend HIGH/MODERATE/LOW to frontend High/Medium/Low
             const riskMap: Record<string, string> = {
@@ -50,7 +68,15 @@ export default function PredictionPage() {
                 'LOW': 'Low'
             };
 
+            const locState = state || formData.location;
+            const coords = (latitude !== undefined && longitude !== undefined)
+                ? [latitude, longitude]
+                : (stateCoordinates[locState] || stateCoordinates["Unknown"]);
+
             setPrediction({
+                state: locState,
+                latitude: coords[0],
+                longitude: coords[1],
                 score: Math.round(probability * 100),
                 riskLevel: riskMap[risk_level] || 'Low',
                 likelihood: Math.round(probability * 100),
@@ -60,6 +86,7 @@ export default function PredictionPage() {
                 alert: alert || false
             });
             setLoading(false);
+            fetchReports(); // Refresh generic reports
 
         } catch (error) {
             setLoading(false);
@@ -179,7 +206,29 @@ export default function PredictionPage() {
                 </div>
 
                 {/* Results Section */}
-                <div className="lg:col-span-2 space-y-8">
+                <div className="lg:col-span-2 space-y-6">
+                    {/* System Summary */}
+                    {reports && (
+                        <div className="grid grid-cols-4 gap-4">
+                            <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-center">
+                                <p className="text-[10px] text-gray-500 font-bold uppercase">Total Reports</p>
+                                <p className="text-xl md:text-2xl font-bold text-gray-900">{reports.total_predictions}</p>
+                            </div>
+                            <div className="bg-red-50 p-4 rounded-xl border border-red-100 shadow-sm text-center">
+                                <p className="text-[10px] text-red-700 font-bold uppercase">High Risk</p>
+                                <p className="text-xl md:text-2xl font-bold text-red-700">{reports.high_risk}</p>
+                            </div>
+                            <div className="bg-orange-50 p-4 rounded-xl border border-orange-100 shadow-sm text-center">
+                                <p className="text-[10px] text-orange-700 font-bold uppercase">Moderate</p>
+                                <p className="text-xl md:text-2xl font-bold text-orange-700">{reports.moderate_risk}</p>
+                            </div>
+                            <div className="bg-green-50 p-4 rounded-xl border border-green-100 shadow-sm text-center">
+                                <p className="text-[10px] text-green-700 font-bold uppercase">Low Risk</p>
+                                <p className="text-xl md:text-2xl font-bold text-green-700">{reports.low_risk}</p>
+                            </div>
+                        </div>
+                    )}
+
                     {prediction ? (
                         <div className="bg-white rounded-xl shadow-md p-8 border border-gray-100 animate-in fade-in slide-in-from-bottom-4 duration-700">
                             <div className="flex flex-col md:flex-row items-center justify-between mb-8 gap-8">
@@ -226,6 +275,21 @@ export default function PredictionPage() {
                                         <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Intensity</span>
                                     </div>
                                 </div>
+                            </div>
+
+                            <div className="mt-8 mb-8 h-80 w-full rounded-xl overflow-hidden border border-gray-200">
+                                <RiskHeatmap
+                                    height="100%"
+                                    zoom={6}
+                                    focusLocation={prediction ? [prediction.latitude, prediction.longitude] : null}
+                                    dataOverride={prediction ? [{
+                                        state: prediction.state,
+                                        latitude: prediction.latitude,
+                                        longitude: prediction.longitude,
+                                        risk_level: prediction.riskLevel.toUpperCase() === 'MEDIUM' ? 'MODERATE' : prediction.riskLevel.toUpperCase(),
+                                        probability: prediction.likelihood / 100
+                                    }] : null}
+                                />
                             </div>
 
                             <div className="mt-8 pt-8 border-t border-gray-50 grid grid-cols-1 md:grid-cols-2 gap-6">
