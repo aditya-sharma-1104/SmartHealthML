@@ -30,6 +30,7 @@ export default function PredictionPage() {
 
     const [loading, setLoading] = useState(false);
     const [reports, setReports] = useState<any>(null);
+    const [error, setError] = useState<string | null>(null);
 
     const fetchReports = async () => {
         try {
@@ -88,9 +89,14 @@ export default function PredictionPage() {
             setLoading(false);
             fetchReports(); // Refresh generic reports
 
-        } catch (error) {
+        } catch (error: any) {
             setLoading(false);
-            alert('Failed to get prediction from server');
+            const isNetworkError = !error.response;
+            setError(
+                isNetworkError
+                    ? 'Cannot reach the server. The backend may be waking up (Render free tier sleeps after 15 min). Please wait 30 seconds and try again.'
+                    : `Server error ${error.response?.status}: ${error.response?.data?.error || 'Prediction failed.'}`
+            );
             console.error('Prediction error:', error);
         }
     };
@@ -111,6 +117,17 @@ export default function PredictionPage() {
                 <h1 className="text-3xl font-bold text-gray-900">AI Disease Outbreak Prediction</h1>
                 <p className="mt-2 text-gray-600">Professional Health Surveillance & Risk Assessment System</p>
             </div>
+
+            {error && (
+                <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-xl flex items-start gap-3">
+                    <span className="text-red-500 text-xl">⚠️</span>
+                    <div>
+                        <p className="text-sm font-bold text-red-700">Connection Error</p>
+                        <p className="text-sm text-red-600 mt-0.5">{error}</p>
+                        <button onClick={() => setError(null)} className="mt-2 text-xs text-red-500 underline">Dismiss</button>
+                    </div>
+                </div>
+            )}
 
             {prediction?.alert && (
                 <div className="bg-red-50 border-l-4 border-red-500 p-4 animate-pulse rounded-r-xl">
