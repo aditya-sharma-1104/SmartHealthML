@@ -1,0 +1,6 @@
+patient_id,name,age,gender,contact,address
+P001,John Doe,45,Male,9876543210,123 Main St
+P002,Jane Smith,32,Female,9876543211,456 Oak Ave
+P003,Bob Wilson,28,Male,9876543212,789 Pine Rd
+P004,Alice Brown,50,Female,9876543213,321 Elm St
+P005,Charlie Davis,19,Male,9876543214,654 Maple Dr

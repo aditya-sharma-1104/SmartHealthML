@@ -93,6 +93,7 @@ dist/
 # Ignore large CSVs but keep the sample
 data/*.csv
 !data/sample_data.csv
+!data/sample_patients.csv
 
 # Ignore extra model versions, keep the active ones
 models/*.pkl
